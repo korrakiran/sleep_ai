@@ -1,13 +1,8 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/sleep-paralysis-ai/backend/run.py" },
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
     { "source": "/", "destination": "/sleep-paralysis-ai/frontend/index.html" },
     { "source": "/(.*)", "destination": "/sleep-paralysis-ai/frontend/$1" }
-  ],
-  "functions": {
-    "sleep-paralysis-ai/backend/run.py": {
-      "maxDuration": 15
-    }
-  }
+  ]
 }
