@@ -6,9 +6,13 @@ env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=env_path)
 print(f"[BOOT] Loading .env from: {env_path}")
 
+import sys
+# Add current directory to path for Vercel
+sys.path.append(os.path.dirname(__file__))
+
 from app import create_app
 
-# Create Flask app
+# Create Flask app for Vercel (exported as 'app')
 app = create_app()
 
 if __name__ == '__main__':

@@ -2,7 +2,9 @@
    SLEEP PARALYSIS AI - CORE LOGIC (Auth Version)
 ═══════════════════════════════════════════════ */
 
-const API = `http://${window.location.hostname}:5005/api`;
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+  ? `http://${window.location.hostname}:5005/api` 
+  : '/api';
 let token = localStorage.getItem('spa_token');
 let currentUser = JSON.parse(localStorage.getItem('spa_user') || 'null');
 
@@ -175,10 +177,15 @@ async function apiFetch(endpoint, method = 'GET', body = null) {
   const options = { method, headers };
   if (body) options.body = JSON.stringify(body);
 
-  const res = await fetch(`${API}${endpoint}`, options);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Request failed');
-  return data;
+  try {
+    const res = await fetch(`${API}${endpoint}`, options);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Server error');
+    return data;
+  } catch (err) {
+    console.error('API Error:', err);
+    throw new Error(err.message === 'Failed to fetch' ? 'Connection lost' : err.message);
+  }
 }
 
 /* ═══════════════════════════════════════════════
