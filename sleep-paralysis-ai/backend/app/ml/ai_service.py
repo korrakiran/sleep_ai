@@ -37,7 +37,7 @@ def analyze_with_ai(features):
         "insights": [
             {{
                 "type": "warning" | "danger" | "success" | "info" | "caution",
-                "icon": "emoji",
+                "icon": "Lucide icon name (e.g., 'alert-triangle', 'check-circle', 'shield', 'activity', 'moon')",
                 "title": "Short Title",
                 "message": "Specific actionable advice based on the data."
             }}

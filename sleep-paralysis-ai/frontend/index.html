@@ -3,64 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="description" content="Sleep Paralysis AI — Track your daytime behavior and predict sleep paralysis episodes with advanced machine learning." />
+  <meta name="description" content="Sleep Paralysis AI — Predict & Prevent" />
   <meta name="theme-color" content="#0a0a1a" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="SleepAI" />
   <link rel="manifest" href="manifest.json" />
-  <title>Sleep Paralysis AI — Predict & Prevent</title>
+  <title>SleepAI — Predict & Prevent</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
 
-  <!-- Chart.js -->
+  <!-- Chart.js & Lucide Icons -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Force Cache Refresh -->
+  <link rel="stylesheet" href="styles.css?v=1001" />
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       SPLASH / AUTH SCREEN
-  ═══════════════════════════════════════════════════════════════════ -->
+  <!-- AUTH SCREEN -->
   <div id="auth-screen" class="screen active">
-    <div class="auth-bg">
-      <div class="auth-orb orb-1"></div>
-      <div class="auth-orb orb-2"></div>
-      <div class="auth-orb orb-3"></div>
-    </div>
+    <div class="auth-bg"><div class="auth-orb orb-1"></div><div class="auth-orb orb-2"></div></div>
     <div class="auth-container">
-      <!-- Logo -->
       <div class="app-logo">
-        <div class="logo-icon">
-          <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
-            <circle cx="21" cy="21" r="20" stroke="url(#grad1)" stroke-width="2"/>
-            <path d="M21 8C14 8 8 14 8 21C8 28 14 34 21 34" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M21 8C28 8 34 14 34 21" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="21" cy="21" r="4" fill="url(#grad2)"/>
-            <path d="M21 13L21 17M21 25L21 29M13 21L17 21M25 21L29 21" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="grad1" x1="0" y1="0" x2="42" y2="42">
-                <stop offset="0%" stop-color="#a78bfa"/>
-                <stop offset="100%" stop-color="#60a5fa"/>
-              </linearGradient>
-              <linearGradient id="grad2" x1="17" y1="17" x2="25" y2="25">
-                <stop offset="0%" stop-color="#a78bfa"/>
-                <stop offset="100%" stop-color="#60a5fa"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <div>
-          <h1 class="app-title">SleepAI</h1>
-          <p class="app-subtitle">Sleep Paralysis Intelligence</p>
-        </div>
+        <h1 class="app-title">SleepAI</h1>
+        <p class="app-subtitle">Sleep Intelligence Agent</p>
       </div>
 
-      <!-- Auth Tabs -->
       <div class="auth-tabs">
         <button class="auth-tab active" id="login-tab" onclick="switchAuthTab('login')">Login</button>
         <button class="auth-tab" id="signup-tab" onclick="switchAuthTab('signup')">Sign Up</button>
@@ -74,495 +44,194 @@
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
-          <div class="input-with-icon">
-            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
-            <button type="button" class="toggle-pw" onclick="togglePassword('login-password')">👁</button>
-          </div>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
         </div>
         <div id="login-error" class="form-error hidden"></div>
         <button type="submit" class="btn-primary" id="login-btn">
           <span class="btn-text">Sign In</span>
           <div class="btn-loader hidden"></div>
         </button>
-        <p class="auth-switch">Don't have an account? <a href="#" onclick="switchAuthTab('signup')">Sign Up</a></p>
       </form>
 
       <!-- Signup Form -->
       <form class="auth-form hidden" id="signup-form" onsubmit="handleSignup(event)">
         <div class="form-group">
           <label class="form-label">Full Name</label>
-          <input type="text" id="signup-name" class="form-input" placeholder="Your name" required autocomplete="name" />
+          <input type="text" id="signup-name" class="form-input" placeholder="Your Name" required />
         </div>
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" required autocomplete="email" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Age <span class="optional">(optional)</span></label>
-          <input type="number" id="signup-age" class="form-input" placeholder="25" min="13" max="120" />
+          <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" required />
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
-          <div class="input-with-icon">
-            <input type="password" id="signup-password" class="form-input" placeholder="Min 8 characters" required autocomplete="new-password" minlength="8" />
-            <button type="button" class="toggle-pw" onclick="togglePassword('signup-password')">👁</button>
-          </div>
+          <input type="password" id="signup-password" class="form-input" placeholder="••••••••" required />
         </div>
         <div id="signup-error" class="form-error hidden"></div>
         <button type="submit" class="btn-primary" id="signup-btn">
           <span class="btn-text">Create Account</span>
           <div class="btn-loader hidden"></div>
         </button>
-        <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthTab('login')">Sign In</a></p>
       </form>
 
-      <!-- Demo note -->
-      <p class="demo-note">Try demo: demo@sleep.ai / demo1234</p>
+      <p class="demo-note">demo@sleep.ai / demo1234</p>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       MAIN APP SHELL
-  ═══════════════════════════════════════════════════════════════════ -->
+  <!-- APP SHELL -->
   <div id="app-shell" class="hidden">
-
-    <!-- Top Nav Bar -->
-    <nav class="topnav">
-      <div class="topnav-left">
-        <div class="nav-logo-icon">🌙</div>
-        <span class="nav-title">SleepAI</span>
-      </div>
-      <div class="topnav-right">
-        <div class="user-avatar" id="user-avatar-btn" onclick="toggleUserMenu()">
-          <span id="user-initials">?</span>
-        </div>
+    <header class="app-header">
+      <div class="logo"><i data-lucide="moon"></i><span>SleepAI</span></div>
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" onclick="toggleTheme()">
+          <i data-lucide="sun" id="theme-icon-sun" class="hidden"></i>
+          <i data-lucide="moon" id="theme-icon-moon"></i>
+        </button>
+        <div class="user-avatar" id="user-avatar-btn" onclick="toggleUserMenu()"><span id="user-initials">K</span></div>
         <div class="user-menu hidden" id="user-menu">
-          <div class="user-menu-header">
-            <p id="menu-user-name">User</p>
-            <p id="menu-user-email" class="menu-email">email</p>
-          </div>
-          <button onclick="showScreen('dashboard')">📊 Dashboard</button>
-          <button onclick="showScreen('tracker')">📝 Track Today</button>
-          <button onclick="showScreen('history')">📅 History</button>
-          <button onclick="showScreen('tips')">💡 Tips</button>
-          <hr/>
-          <button onclick="logout()" class="logout-btn">🚪 Log Out</button>
+          <button onclick="showScreen('dashboard')"><i data-lucide="layout-grid"></i> Dashboard</button>
+          <button onclick="logout()" class="logout-btn"><i data-lucide="log-out"></i> Log Out</button>
         </div>
       </div>
-    </nav>
+    </header>
 
-    <!-- Page Content -->
     <main class="app-content">
-
-      <!-- ── DASHBOARD ──────────────────────────────────────────── -->
+      <!-- DASHBOARD -->
       <section id="screen-dashboard" class="app-screen active">
-        <div class="screen-header">
-          <div>
-            <h2 class="screen-title">Dashboard</h2>
-            <p class="screen-subtitle" id="dashboard-greeting">Good evening!</p>
-          </div>
-          <div class="header-date" id="dashboard-date"></div>
-        </div>
-
-        <!-- Risk Meter Card -->
-        <div class="glass-card risk-card" id="risk-card">
+        <h2 class="screen-title">Dashboard</h2>
+        <div class="glass-card risk-card">
           <div class="risk-card-top">
-            <div>
-              <p class="card-label">Tonight's Risk Level</p>
-              <h3 class="risk-level-text" id="risk-level-text">— —</h3>
-              <p class="risk-pct" id="risk-pct">Analyze today's data →</p>
-            </div>
-            <div class="risk-gauge-wrapper">
-              <canvas id="risk-gauge" width="120" height="120"></canvas>
-              <div class="gauge-center-text" id="gauge-pct-text">—%</div>
-            </div>
+            <div><p class="card-label">Tonight's Risk</p><h3 id="risk-level-text">— —</h3></div>
+            <div class="risk-gauge-wrapper"><canvas id="risk-gauge" width="120" height="120"></canvas></div>
           </div>
-          <div class="risk-meta" id="risk-meta">
-            <span class="meta-chip" id="episode-time-chip">🕑 Episode: —</span>
-            <span class="meta-chip" id="alarm-chip">⏰ Alarm: —</span>
+          <div class="risk-chips">
+            <div class="risk-chip" id="episode-time-chip"><i data-lucide="clock"></i> Episode: —</div>
+            <div class="risk-chip" id="alarm-chip"><i data-lucide="bell"></i> Alarm: —</div>
           </div>
         </div>
-
-        <!-- Stats Row -->
-        <div class="stats-row" id="stats-row">
+        <div class="stats-row">
           <div class="stat-card glass-card">
-            <div class="stat-icon">😰</div>
-            <div>
-              <p class="stat-label">Avg Stress</p>
-              <p class="stat-value" id="avg-stress">—</p>
-            </div>
+            <div class="stat-icon-box"><i data-lucide="frown"></i></div>
+            <div><p class="stat-label">Avg Stress</p><p class="stat-value" id="avg-stress">—</p></div>
           </div>
           <div class="stat-card glass-card">
-            <div class="stat-icon">😴</div>
-            <div>
-              <p class="stat-label">Avg Sleep</p>
-              <p class="stat-value" id="avg-sleep">—h</p>
-            </div>
-          </div>
-          <div class="stat-card glass-card">
-            <div class="stat-icon">📱</div>
-            <div>
-              <p class="stat-label">Avg Screen</p>
-              <p class="stat-value" id="avg-screen">—h</p>
-            </div>
-          </div>
-          <div class="stat-card glass-card">
-            <div class="stat-icon">👻</div>
-            <div>
-              <p class="stat-label">Horror %</p>
-              <p class="stat-value" id="horror-pct">—%</p>
-            </div>
+            <div class="stat-icon-box"><i data-lucide="moon"></i></div>
+            <div><p class="stat-label">Avg Sleep</p><p class="stat-value" id="avg-sleep">—h</p></div>
           </div>
         </div>
-
-        <!-- Charts Row -->
-        <div class="charts-row">
-          <div class="glass-card chart-card">
-            <h4 class="chart-title">Stress & Sleep (7 days)</h4>
-            <canvas id="stress-sleep-chart" height="200"></canvas>
-          </div>
-          <div class="glass-card chart-card">
-            <h4 class="chart-title">Risk History</h4>
-            <canvas id="risk-history-chart" height="200"></canvas>
-          </div>
-        </div>
-
-        <!-- AI Insights Preview -->
-        <div class="glass-card">
-          <div class="section-header-row">
-            <h4 class="section-title">AI Insights</h4>
-            <button class="btn-small" onclick="showScreen('tracker')">+ Track Today</button>
-          </div>
-          <div id="dashboard-insights" class="insights-list">
-            <div class="empty-state">
-              <div class="empty-icon">🔮</div>
-              <p>Track your daily habits to get personalized AI insights</p>
-              <button class="btn-primary mt-2" onclick="showScreen('tracker')">Start Tracking</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Alarms Section -->
-        <div class="glass-card" id="alarms-section">
-          <h4 class="section-title">Active Alarms</h4>
-          <div id="alarms-list">
-            <p class="no-alarms">No alarms set. High/Medium risk predictions auto-schedule alarms.</p>
-          </div>
-        </div>
+        <div class="glass-card"><h4 class="section-title">AI Insights</h4><div id="dashboard-insights" class="insights-list"></div></div>
       </section>
 
-      <!-- ── TRACKER SCREEN ─────────────────────────────────────── -->
+      <!-- TRACKER (Structured Grid) -->
       <section id="screen-tracker" class="app-screen">
-        <div class="screen-header">
-          <div>
-            <h2 class="screen-title">Daily Tracker</h2>
-            <p class="screen-subtitle">Log today's activity for AI analysis</p>
-          </div>
-        </div>
+        <h2 class="screen-title">Daily Tracker</h2>
+        <p class="screen-subtitle">Organize your habits for AI insights</p>
+        
+        <form class="tracker-form" id="tracker-form" onsubmit="submitTracker(event)" novalidate>
+          <div class="tracker-grid">
+            <!-- Column 1: Core Metrics -->
+            <div class="tracker-col">
+              <div class="glass-card input-group">
+                <div class="input-card-header"><i data-lucide="frown"></i><span>Stress Level</span><span id="stress-value" class="value-badge">5</span></div>
+                <input type="range" id="stress-slider" class="slider" min="1" max="10" value="5" oninput="updateSlider('stress-slider', 'stress-value', '')" />
+              </div>
+              
+              <div class="glass-card input-group">
+                <div class="input-card-header"><i data-lucide="moon"></i><span>Sleep Quality</span><span id="sleep-value" class="value-badge">7h</span></div>
+                <input type="range" id="sleep-slider" class="slider" min="0" max="12" step="0.5" value="7" oninput="updateSlider('sleep-slider', 'sleep-value', 'h')" />
+              </div>
 
-        <form class="tracker-form glass-card" id="tracker-form" onsubmit="submitTracker(event)">
+              <div class="glass-card input-group">
+                <div class="input-card-header"><i data-lucide="smartphone"></i><span>Screen Time</span><span id="screen-value" class="value-badge">4h</span></div>
+                <input type="range" id="screen-slider" class="slider" min="0" max="16" step="0.5" value="4" oninput="updateSlider('screen-slider', 'screen-value', 'h')" />
+              </div>
+            </div>
 
-          <!-- Stress Level -->
-          <div class="tracker-section">
-            <div class="tracker-section-header">
-              <span class="tracker-icon">😰</span>
-              <div>
-                <h4>Stress Level</h4>
-                <p class="tracker-hint">How stressed were you today?</p>
+            <!-- Column 2: Habits & Setup -->
+            <div class="tracker-col">
+              <div class="glass-card input-group">
+                <div class="input-card-header"><i data-lucide="coffee"></i><span>Caffeine</span><span id="caffeine-value" class="value-badge">1 cup</span></div>
+                <input type="range" id="caffeine-slider" class="slider" min="0" max="8" value="1" oninput="updateSlider('caffeine-slider', 'caffeine-value', ' cup')" />
               </div>
-            </div>
-            <div class="slider-group">
-              <input type="range" id="stress-slider" class="slider" min="1" max="10" step="0.5" value="5"
-                     oninput="updateSlider('stress-slider', 'stress-value', '')" />
-              <div class="slider-labels">
-                <span>1 Calm</span>
-                <span class="slider-val" id="stress-value">5</span>
-                <span>10 Extreme</span>
-              </div>
-              <div class="stress-bar" id="stress-bar"></div>
-            </div>
-          </div>
 
-          <!-- Sleep Hours -->
-          <div class="tracker-section">
-            <div class="tracker-section-header">
-              <span class="tracker-icon">😴</span>
-              <div>
-                <h4>Last Night's Sleep</h4>
-                <p class="tracker-hint">How many hours did you sleep?</p>
+              <div class="toggles-grid-new">
+                <div class="toggle-card-new" id="horror-toggle" onclick="toggleOption('horror-toggle', 'watched-horror')">
+                  <i data-lucide="ghost"></i><span>Horror</span><input type="hidden" id="watched-horror" value="false">
+                </div>
+                <div class="toggle-card-new" id="nap-toggle" onclick="toggleOption('nap-toggle', 'nap-taken')">
+                  <i data-lucide="zzz"></i><span>Took Nap</span><input type="hidden" id="nap-taken" value="false">
+                </div>
               </div>
-            </div>
-            <div class="slider-group">
-              <input type="range" id="sleep-slider" class="slider" min="0" max="12" step="0.5" value="7"
-                     oninput="updateSlider('sleep-slider', 'sleep-value', 'h')" />
-              <div class="slider-labels">
-                <span>0h</span>
-                <span class="slider-val" id="sleep-value">7h</span>
-                <span>12h</span>
-              </div>
-            </div>
-          </div>
 
-          <!-- Screen Time -->
-          <div class="tracker-section">
-            <div class="tracker-section-header">
-              <span class="tracker-icon">📱</span>
-              <div>
-                <h4>Screen Time</h4>
-                <p class="tracker-hint">Total hours on phone/computer</p>
-              </div>
-            </div>
-            <div class="slider-group">
-              <input type="range" id="screen-slider" class="slider" min="0" max="16" step="0.5" value="4"
-                     oninput="updateSlider('screen-slider', 'screen-value', 'h')" />
-              <div class="slider-labels">
-                <span>0h</span>
-                <span class="slider-val" id="screen-value">4h</span>
-                <span>16h</span>
+              <div class="glass-card input-group">
+                <div class="input-card-header"><i data-lucide="bed"></i><span>Sleep Position</span></div>
+                <div class="position-selector-new">
+                  <button type="button" class="pos-tile-new active" id="pos-back" onclick="selectPosition('back')">Back</button>
+                  <button type="button" class="pos-tile-new" id="pos-side" onclick="selectPosition('side')">Side</button>
+                  <button type="button" class="pos-tile-new" id="pos-stomach" onclick="selectPosition('stomach')">Stom</button>
+                </div>
+                <input type="hidden" id="sleep-position" value="back">
               </div>
             </div>
           </div>
 
-          <!-- Caffeine -->
-          <div class="tracker-section">
-            <div class="tracker-section-header">
-              <span class="tracker-icon">☕</span>
-              <div>
-                <h4>Caffeine Intake</h4>
-                <p class="tracker-hint">Cups of coffee/tea/energy drinks</p>
-              </div>
-            </div>
-            <div class="slider-group">
-              <input type="range" id="caffeine-slider" class="slider" min="0" max="8" step="0.5" value="1"
-                     oninput="updateSlider('caffeine-slider', 'caffeine-value', ' cups')" />
-              <div class="slider-labels">
-                <span>0</span>
-                <span class="slider-val" id="caffeine-value">1 cups</span>
-                <span>8 cups</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Physical Activity -->
-          <div class="tracker-section">
-            <div class="tracker-section-header">
-              <span class="tracker-icon">🏃</span>
-              <div>
-                <h4>Physical Activity</h4>
-                <p class="tracker-hint">Hours of exercise/movement</p>
-              </div>
-            </div>
-            <div class="slider-group">
-              <input type="range" id="activity-slider" class="slider" min="0" max="4" step="0.25" value="0"
-                     oninput="updateSlider('activity-slider', 'activity-value', 'h')" />
-              <div class="slider-labels">
-                <span>0h</span>
-                <span class="slider-val" id="activity-value">0h</span>
-                <span>4h</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bedtime -->
-          <div class="tracker-section">
-            <div class="tracker-section-header">
-              <span class="tracker-icon">🌙</span>
-              <div>
-                <h4>Planned Bedtime</h4>
-                <p class="tracker-hint">What time will you sleep tonight?</p>
-              </div>
-            </div>
-            <input type="time" id="bedtime-input" class="form-input" value="23:00" />
-          </div>
-
-          <!-- Toggle Inputs -->
-          <div class="toggles-grid">
-            <div class="toggle-card" id="horror-toggle" onclick="toggleOption('horror-toggle', 'watched-horror')">
-              <div class="toggle-icon">👻</div>
-              <div>
-                <p class="toggle-label">Horror Content</p>
-                <p class="toggle-sub">Watched horror today?</p>
-              </div>
-              <div class="toggle-switch" id="toggle-horror">
-                <div class="toggle-knob"></div>
-              </div>
-              <input type="hidden" id="watched-horror" value="false" />
-            </div>
-
-            <div class="toggle-card" id="nap-toggle" onclick="toggleOption('nap-toggle', 'nap-taken')">
-              <div class="toggle-icon">💤</div>
-              <div>
-                <p class="toggle-label">Took a Nap</p>
-                <p class="toggle-sub">Daytime nap today?</p>
-              </div>
-              <div class="toggle-switch" id="toggle-nap">
-                <div class="toggle-knob"></div>
-              </div>
-              <input type="hidden" id="nap-taken" value="false" />
-            </div>
-          </div>
-
-          <!-- Sleep Position -->
-          <div class="tracker-section">
-            <div class="tracker-section-header">
-              <span class="tracker-icon">🛏️</span>
-              <div>
-                <h4>Sleep Position</h4>
-                <p class="tracker-hint">How do you usually sleep?</p>
-              </div>
-            </div>
-            <div class="position-pills">
-              <button type="button" class="pill active" id="pos-back" onclick="selectPosition('back')">🔹 Back</button>
-              <button type="button" class="pill" id="pos-side" onclick="selectPosition('side')">◀ Side</button>
-              <button type="button" class="pill" id="pos-stomach" onclick="selectPosition('stomach')">▼ Stomach</button>
-            </div>
-            <input type="hidden" id="sleep-position" value="back" />
-          </div>
-
-          <!-- Submit -->
-          <div id="tracker-error" class="form-error hidden"></div>
           <button type="submit" class="btn-primary btn-large" id="analyze-btn">
-            <span class="btn-text">🔮 Analyze My Risk</span>
+            <span class="btn-text">Analyze My Risk</span>
             <div class="btn-loader hidden"></div>
           </button>
         </form>
       </section>
 
-      <!-- ── PREDICTION RESULT SCREEN ───────────────────────────── -->
+      <!-- PREDICTION -->
       <section id="screen-prediction" class="app-screen">
-        <div class="screen-header">
-          <button class="back-btn" onclick="showScreen('tracker')">← Back</button>
-          <h2 class="screen-title">AI Analysis</h2>
-        </div>
-
-        <!-- Big Risk Result -->
+        <h2 class="screen-title">AI Result</h2>
         <div class="prediction-hero glass-card" id="pred-hero">
-          <div class="pred-risk-badge" id="pred-risk-badge">—</div>
-          <div class="pred-gauge-wrapper">
-            <canvas id="pred-gauge" width="160" height="160"></canvas>
-            <div class="pred-gauge-center" id="pred-gauge-pct">—%</div>
+          <div class="pred-risk-badge" id="pred-risk-badge">Low Risk</div>
+          <div class="pred-gauge-wrapper"><canvas id="pred-gauge" width="160" height="160"></canvas><h3 id="pred-gauge-pct">25%</h3></div>
+          
+          <div class="risk-bars-container">
+            <div class="risk-bar-row"><span>Low</span><div class="bar-bg"><div id="bar-low" class="bar-fill low"></div></div><span id="pct-low">0%</span></div>
+            <div class="risk-bar-row"><span>Med</span><div class="bar-bg"><div id="bar-medium" class="bar-fill medium"></div></div><span id="pct-medium">0%</span></div>
+            <div class="risk-bar-row"><span>High</span><div class="bar-bg"><div id="bar-high" class="bar-fill high"></div></div><span id="pct-high">0%</span></div>
           </div>
+
           <div class="pred-meta-grid">
-            <div class="pred-meta-item">
-              <p class="pred-meta-label">Episode Time</p>
-              <p class="pred-meta-val" id="pred-episode-time">—</p>
-            </div>
-            <div class="pred-meta-item">
-              <p class="pred-meta-label">REM Phase</p>
-              <p class="pred-meta-val" id="pred-rem-time">—</p>
-            </div>
-            <div class="pred-meta-item">
-              <p class="pred-meta-label">Smart Alarm</p>
-              <p class="pred-meta-val" id="pred-alarm-time">—</p>
-            </div>
+            <div class="pred-meta-item"><p class="pred-meta-label">Episode Time</p><p class="pred-meta-val" id="pred-episode-time">—</p></div>
+            <div class="pred-meta-item"><p class="pred-meta-label">REM Phase</p><p class="pred-meta-val" id="pred-rem-time">—</p></div>
+            <div class="pred-meta-item"><p class="pred-meta-label">Smart Alarm</p><p class="pred-meta-val" id="pred-alarm-time">—</p></div>
           </div>
-        </div>
-
-        <!-- Risk Breakdown -->
-        <div class="glass-card">
-          <h4 class="section-title">Risk Breakdown</h4>
-          <div class="risk-bars" id="risk-bars">
-            <div class="risk-bar-item">
-              <span>Low</span>
-              <div class="risk-bar-track"><div class="risk-bar-fill low" id="bar-low"></div></div>
-              <span id="pct-low">—%</span>
-            </div>
-            <div class="risk-bar-item">
-              <span>Medium</span>
-              <div class="risk-bar-track"><div class="risk-bar-fill medium" id="bar-medium"></div></div>
-              <span id="pct-medium">—%</span>
-            </div>
-            <div class="risk-bar-item">
-              <span>High</span>
-              <div class="risk-bar-track"><div class="risk-bar-fill high" id="bar-high"></div></div>
-              <span id="pct-high">—%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI Insights Cards -->
-        <div class="glass-card">
-          <h4 class="section-title">🤖 AI Recommendations</h4>
           <div id="pred-insights" class="insights-list"></div>
         </div>
-
-        <!-- Alarm Section -->
-        <div class="glass-card" id="pred-alarm-card">
-          <h4 class="section-title">⏰ Smart Alarm</h4>
-          <div id="pred-alarm-info"></div>
-        </div>
-
-        <button class="btn-primary mt-2" onclick="showScreen('dashboard')">View Dashboard →</button>
+        <button class="btn-primary mt-2" onclick="showScreen('dashboard')">Back to Home</button>
       </section>
 
-      <!-- ── HISTORY SCREEN ─────────────────────────────────────── -->
+      <!-- HISTORY -->
       <section id="screen-history" class="app-screen">
-        <div class="screen-header">
-          <div>
-            <h2 class="screen-title">Sleep History</h2>
-            <p class="screen-subtitle">Your past logs & predictions</p>
-          </div>
-        </div>
-        <div id="history-list" class="history-list">
-          <div class="loading-spinner">Loading...</div>
-        </div>
+        <h2 class="screen-title">History</h2>
+        <div id="history-list" class="history-list"></div>
       </section>
 
-      <!-- ── TIPS SCREEN ────────────────────────────────────────── -->
+      <!-- TIPS -->
       <section id="screen-tips" class="app-screen">
-        <div class="screen-header">
-          <div>
-            <h2 class="screen-title">Prevention Tips</h2>
-            <p class="screen-subtitle">Science-backed strategies</p>
-          </div>
-        </div>
-        <div id="tips-list" class="tips-list">
-          <div class="loading-spinner">Loading tips...</div>
-        </div>
+        <h2 class="screen-title">Tips</h2>
+        <div id="tips-list"></div>
       </section>
-
     </main>
 
-    <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
-      <button class="nav-btn active" id="nav-dashboard" onclick="showScreen('dashboard')">
-        <span class="nav-icon">📊</span>
-        <span>Dashboard</span>
-      </button>
-      <button class="nav-btn" id="nav-tracker" onclick="showScreen('tracker')">
-        <span class="nav-icon">📝</span>
-        <span>Track</span>
-      </button>
-      <button class="nav-btn" id="nav-history" onclick="showScreen('history')">
-        <span class="nav-icon">📅</span>
-        <span>History</span>
-      </button>
-      <button class="nav-btn" id="nav-tips" onclick="showScreen('tips')">
-        <span class="nav-icon">💡</span>
-        <span>Tips</span>
-      </button>
+      <button class="nav-btn active" id="nav-dashboard" onclick="showScreen('dashboard')"><i data-lucide="layout-grid"></i><span>Home</span></button>
+      <button class="nav-btn" id="nav-tracker" onclick="showScreen('tracker')"><i data-lucide="clipboard-list"></i><span>Track</span></button>
+      <button class="nav-btn" id="nav-history" onclick="showScreen('history')"><i data-lucide="calendar"></i><span>History</span></button>
+      <button class="nav-btn" id="nav-tips" onclick="showScreen('tips')"><i data-lucide="lightbulb"></i><span>Tips</span></button>
     </nav>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       TOAST NOTIFICATION
-  ═══════════════════════════════════════════════════════════════ -->
-  <div id="toast" class="toast hidden">
-    <span id="toast-msg"></span>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       ALARM MODAL
-  ═══════════════════════════════════════════════════════════════ -->
-  <div id="alarm-modal" class="modal-overlay hidden">
-    <div class="modal-card glass-card">
-      <div class="alarm-modal-icon">⏰</div>
-      <h3 id="alarm-modal-title">Smart Alarm Set!</h3>
-      <p id="alarm-modal-body">Your prevention alarm has been scheduled.</p>
-      <button class="btn-primary" onclick="closeAlarmModal()">Got It!</button>
-    </div>
-  </div>
-
+  <div id="toast" class="toast hidden"><span id="toast-msg"></span></div>
   <script src="app.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
+    });
+  </script>
 </body>
 </html>

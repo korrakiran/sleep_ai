@@ -59,13 +59,14 @@ def signup():
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    """Authenticate user and return JWT token"""
+    """Authenticate existing user"""
     data = request.get_json()
 
     if not data.get('email') or not data.get('password'):
         return jsonify({'error': 'Email and password are required'}), 400
 
-    user = users_col.find_one({'email': data['email'].lower().strip()})
+    email = data['email'].lower().strip()
+    user = users_col.find_one({'email': email})
 
     if not user or not check_password_hash(user['password_hash'], data['password']):
         return jsonify({'error': 'Invalid email or password'}), 401
@@ -87,3 +88,30 @@ def get_profile():
     if not user:
         return jsonify({'error': 'User not found'}), 404
     return jsonify({'user': user_to_dict(user)}), 200
+
+@auth_bp.route('/anonymous', methods=['POST'])
+def anonymous_login():
+    """Create or resume an anonymous session"""
+    data = request.get_json()
+    device_id = data.get('device_id', 'global_guest')
+    
+    email = f"guest_{device_id}@sleep.ai"
+    user = users_col.find_one({'email': email})
+    
+    if not user:
+        user_doc = {
+            'name': 'Guest User',
+            'email': email,
+            'password_hash': 'none',
+            'is_anonymous': True,
+            'created_at': datetime.utcnow()
+        }
+        result = users_col.insert_one(user_doc)
+        user = user_doc
+        user['_id'] = result.inserted_id
+        
+    token = create_access_token(identity=str(user['_id']))
+    return jsonify({
+        'token': token,
+        'user': user_to_dict(user)
+    }), 200

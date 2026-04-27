@@ -7,8 +7,15 @@ from pymongo import MongoClient
 
 # Initialize MongoDB Client
 mongo_uri = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/sleep_paralysis')
+sanitized_uri = mongo_uri.split('@')[-1] if '@' in mongo_uri else 'localhost'
+print(f"[DB] Initializing connection to: {sanitized_uri}")
+
 client = MongoClient(mongo_uri)
-db = client.get_default_database()
+# Explicitly set the database name to sleep_ai
+db_name = 'sleep_ai'
+db = client[db_name]
+
+print(f"[DB] Connected to cluster. Using database: {db_name}")
 
 # Collections
 users_col = db['users']

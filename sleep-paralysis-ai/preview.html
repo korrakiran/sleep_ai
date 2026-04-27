@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleepAI — Theme Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            /* Dark Theme (Default) */
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #0f0f2e;
+            --glass-bg: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --success: #34d399;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.light-mode {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --glass-bg: rgba(0,0,0,0.03);
+            --glass-border: rgba(0,0,0,0.08);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        [data-lucide] { width: 20px; height: 20px; stroke-width: 2.5px; }
+
+        .app-shell { display: flex; flex-direction: column; min-height: 100vh; padding-bottom: 90px; }
+
+        header {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; background: var(--bg-primary); backdrop-filter: blur(15px); z-index: 100;
+        }
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 20px; color: var(--primary-light); }
+        .header-actions { display: flex; align-items: center; gap: 16px; }
+        .icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; transition: var(--transition); }
+        .hidden { display: none !important; }
+
+        .screen { padding: 20px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .greeting-box { margin-bottom: 24px; }
+        .risk-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px; margin-bottom: 24px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .risk-level-text { font-size: 42px; font-weight: 800; color: var(--danger); }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .stat-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 16px; display: flex; align-items: center; gap: 12px; }
+        .stat-icon-box { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(139, 92, 246, 0.1); }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 85px;
+            background: var(--bg-secondary); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; align-items: center; padding-bottom: 25px;
+        }
+        .nav-btn { background: none; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 10px; }
+        .nav-btn.active { color: var(--primary-light); }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <header>
+            <div class="logo">
+                <i data-lucide="moon"></i>
+                <span>SleepAI</span>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="toggleTheme()">
+                    <i data-lucide="sun" id="sun-icon" class="hidden"></i>
+                    <i data-lucide="moon" id="moon-icon"></i>
+                </button>
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 12px; color: white;">DU</div>
+            </div>
+        </header>
+
+        <main class="screen">
+            <div class="greeting-box">
+                <h1>Theme Preview 👋</h1>
+                <p>Click the sun/moon icon above to toggle themes</p>
+            </div>
+
+            <div class="risk-card">
+                <div>
+                    <h3 style="font-size: 14px; color: var(--text-muted);">Tonight's Risk</h3>
+                    <div class="risk-level-text">High</div>
+                    <p style="font-size: 14px; color: var(--text-muted);">84% probability</p>
+                </div>
+                <div style="width: 80px; height: 80px; border: 6px solid var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">84%</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon-box" style="color: var(--danger)"><i data-lucide="frown"></i></div>
+                    <div><p style="font-size: 12px; color: var(--text-muted)">Stress</p><p style="font-weight: 700">8.2</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-box" style="color: var(--success)"><i data-lucide="moon"></i></div>
+                    <div><p style="font-size: 12px; color: var(--text-muted)">Sleep</p><p style="font-weight: 700">5.4h</p></div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active"><i data-lucide="layout-grid"></i><span>Dashboard</span></button>
+            <button class="nav-btn"><i data-lucide="clipboard-list"></i><span>Track</span></button>
+            <button class="nav-btn"><i data-lucide="calendar"></i><span>History</span></button>
+            <button class="nav-btn"><i data-lucide="lightbulb"></i><span>Tips</span></button>
+        </nav>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleTheme() {
+            const body = document.body;
+            const isLight = body.classList.toggle('light-mode');
+            
+            document.getElementById('sun-icon').classList.toggle('hidden', !isLight);
+            document.getElementById('moon-icon').classList.toggle('hidden', isLight);
+            
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
