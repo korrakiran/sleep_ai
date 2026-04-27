@@ -30,6 +30,14 @@ function showAuth() {
 function showApp() {
   document.getElementById('auth-screen').classList.add('hidden');
   document.getElementById('app-shell').classList.remove('hidden');
+  
+  // Set user initials in avatar
+  if (currentUser && currentUser.name) {
+    const initials = currentUser.name.charAt(0).toUpperCase();
+    const initialsEl = document.getElementById('user-initials');
+    if (initialsEl) initialsEl.textContent = initials;
+  }
+  
   loadDashboard();
 }
 
