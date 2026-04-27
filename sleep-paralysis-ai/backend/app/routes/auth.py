@@ -24,6 +24,8 @@ def user_to_dict(user):
 @auth_bp.route('/signup', methods=['POST'])
 def signup():
     """Register a new user"""
+    if users_col is None:
+        return jsonify({'error': 'Database connection unavailable. Please check your MONGO_URI.'}), 503
     data = request.get_json()
 
     # Validation
@@ -60,6 +62,8 @@ def signup():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     """Authenticate existing user"""
+    if users_col is None:
+        return jsonify({'error': 'Database connection unavailable. Please check your MONGO_URI.'}), 503
     data = request.get_json()
 
     if not data.get('email') or not data.get('password'):
