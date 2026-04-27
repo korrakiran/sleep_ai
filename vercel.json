@@ -1,13 +1,27 @@
 {
   "version": 2,
-  "functions": {
-    "server/index.py": {
-      "runtime": "vercel-python@0.1.1"
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "sleep-paralysis-ai/frontend/**",
+      "use": "@vercel/static"
     }
-  },
+  ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/server/index.py" },
-    { "source": "/", "destination": "/sleep-paralysis-ai/frontend/index.html" },
-    { "source": "/(.*)", "destination": "/sleep-paralysis-ai/frontend/$1" }
+    {
+      "source": "/api/(.*)",
+      "destination": "api/index.py"
+    },
+    {
+      "source": "/",
+      "destination": "sleep-paralysis-ai/frontend/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "sleep-paralysis-ai/frontend/$1"
+    }
   ]
 }
