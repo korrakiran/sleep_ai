@@ -174,33 +174,31 @@ async function apiFetch(endpoint, method = 'GET', body = null) {
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-
-  const options = { method, headers, signal: controller.signal };
+  const options = { method, headers };
   if (body) options.body = JSON.stringify(body);
 
   try {
     const res = await fetch(`${API}${endpoint}`, options);
-    clearTimeout(timeoutId);
     
+    // Check if the response is JSON
     const contentType = res.headers.get('content-type');
-    let data;
-    
-    if (contentType && contentType.includes('application/json')) {
-      data = await res.json();
-    } else {
+    if (!contentType || !contentType.includes('application/json')) {
       const text = await res.text();
-      throw new Error(text || `Server error (${res.status})`);
+      console.error('Non-JSON Response:', text);
+      throw new Error('Server returned an unexpected response. Please try again later.');
     }
 
-    if (!res.ok) throw new Error(data.error || data.message || 'Server error');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Server error');
     return data;
   } catch (err) {
-    clearTimeout(timeoutId);
-    console.error('API Error:', err);
-    if (err.name === 'AbortError') throw new Error('Request timed out. Please try again.');
-    throw new Error(err.message === 'Failed to fetch' || err.message.includes('expected pattern') ? 'Connection error. Please try again.' : err.message);
+    console.error('API Fetch Error:', err);
+    // Simplify the error message for the UI
+    let msg = err.message;
+    if (msg.includes('expected pattern') || msg.includes('Failed to fetch')) {
+        msg = 'Connection error. The server might be waking up, please try again in a moment.';
+    }
+    throw new Error(msg);
   }
 }
 
