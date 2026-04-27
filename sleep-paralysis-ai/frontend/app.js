@@ -183,14 +183,24 @@ async function apiFetch(endpoint, method = 'GET', body = null) {
   try {
     const res = await fetch(`${API}${endpoint}`, options);
     clearTimeout(timeoutId);
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Server error');
+    
+    const contentType = res.headers.get('content-type');
+    let data;
+    
+    if (contentType && contentType.includes('application/json')) {
+      data = await res.json();
+    } else {
+      const text = await res.text();
+      throw new Error(text || `Server error (${res.status})`);
+    }
+
+    if (!res.ok) throw new Error(data.error || data.message || 'Server error');
     return data;
   } catch (err) {
     clearTimeout(timeoutId);
     console.error('API Error:', err);
     if (err.name === 'AbortError') throw new Error('Request timed out. Please try again.');
-    throw new Error(err.message === 'Failed to fetch' ? 'Connection lost' : err.message);
+    throw new Error(err.message === 'Failed to fetch' || err.message.includes('expected pattern') ? 'Connection error. Please try again.' : err.message);
   }
 }
 
