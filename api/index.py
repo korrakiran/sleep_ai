@@ -14,7 +14,7 @@ except Exception as e:
     error_info = traceback.format_exc()
     from flask import Flask
     app = Flask(__name__)
-    @app.route('/', defaults={'path': ''})
-    @app.route('/<path:path>')
+    @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
+    @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
     def catch_all(path):
         return f"BACKEND CRASH DURING BOOT:\n\n{error_info}", 500
