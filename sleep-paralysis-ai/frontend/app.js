@@ -174,16 +174,22 @@ async function apiFetch(endpoint, method = 'GET', body = null) {
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const options = { method, headers };
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+  const options = { method, headers, signal: controller.signal };
   if (body) options.body = JSON.stringify(body);
 
   try {
     const res = await fetch(`${API}${endpoint}`, options);
+    clearTimeout(timeoutId);
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Server error');
     return data;
   } catch (err) {
+    clearTimeout(timeoutId);
     console.error('API Error:', err);
+    if (err.name === 'AbortError') throw new Error('Request timed out. Please try again.');
     throw new Error(err.message === 'Failed to fetch' ? 'Connection lost' : err.message);
   }
 }
