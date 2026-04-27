@@ -1,5 +1,10 @@
 {
   "version": 2,
+  "functions": {
+    "server/index.py": {
+      "runtime": "vercel-python@0.1.1"
+    }
+  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/server/index.py" },
     { "source": "/", "destination": "/sleep-paralysis-ai/frontend/index.html" },
